@@ -53,7 +53,7 @@ public class UserService {
         Optional<UserEntity> optionalUsersEntity = userRepository.findById(userId);
 
         if (optionalUsersEntity.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, Constants.UserNotFound);
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED, Constants.USER_NOT_FOUND);
         }
 
         userRepository.deleteById(userId);
@@ -64,7 +64,7 @@ public class UserService {
     private UserEntity getUserEntity(String userId) throws ResponseStatusException {
         Optional<UserEntity> userEntity = userRepository.findById(userId);
 
-        return userEntity.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Constants.UserNotFound));
+        return userEntity.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Constants.USER_NOT_FOUND));
     }
 
 
@@ -76,7 +76,7 @@ public class UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         System.out.println("USERNAME "+userDTO.username);
         System.out.println("PASSWORD "+userDTO.password);
-        String hashedPassword = encoder.encode("muhSalt123"+userDTO.password);
+        String hashedPassword = encoder.encode(Constants.SALT +userDTO.password);
 
         return new UserEntity(userDTO.username, hashedPassword);
     }
